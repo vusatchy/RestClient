@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+     <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="css/boot.css" rel="stylesheet" id="bootstrap-css">
+    <link href="css/login.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container">
+
+
+    
+    <form method="POST" action="http://localhost:8080/registration" class="form-signin">
+
+        <h2 class="form-signin-heading">Create your account</h2>
+        <div class="form-group">
+        <input name="login" type="text" id="login" class="form-control" placeholder="Login"  autofocus="true"/>
+        <input name="email" type="text" id="email" class="form-control" placeholder="E-mail" autofocus="true"/>
+        <input name="password" type="password" id="password" class="form-control" placeholder="Password"/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+        <h4 class="text-center"><a href="login.html">Already registered</a></h4>
+        </div>
+
+      </form>
+
+</div>
+
+<script>
+
+
+    if(!(sessionStorage['user_id'] === undefined)){
+
+            $(location).attr('href', 'products.html');
+    }
+
+    $(".form-signin").submit(function(event) {
+
+        event.preventDefault();
+
+        var $form = $( this ), url = $form.attr('action');
+
+        var posting = $.post( url, { login: $('#login').val() , email: $('#email').val() , password : $('#password').val()} );
+
+        posting.done(function( data ) {
+            if(data.error != undefined){
+                text = ''
+                text +=  '<form method="POST" action="http://localhost:8080/registration" class="form-signin">'
+                text +=  '<h2 class="form-signin-heading">Create your account</h2>'
+                text +=  '<div class="form-group has-error ">'
+                text +=  '<input name="login" type="text" id="login" class="form-control" placeholder="Login"  autofocus="true"/>'
+                text +=  '<input name="email" type="text" id="email" class="form-control" placeholder="E-mail" autofocus="true"/>'
+                text +=  '<input name="password" type="password" id="password" class="form-control" placeholder="Password"/>'
+                text +=  '<span>' + data.error + '</span>'
+                text +=  '<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>'
+                text +=  '<h4 class="text-center"><a href="login.html">Already registered</a></h4>'
+                text +=  '</div>'
+                text +=  '</form>'
+                $(".container").html(text);
+            } else {
+                $(location).attr('href', 'products.html');
+                sessionStorage['user_id'] = data.id
+                sessionStorage['user_name'] = data.name
+            }
+        });
+    });
+
+    
+</script>
+
+</body>
+</html>

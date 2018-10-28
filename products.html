@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="css/boot.css" rel="stylesheet" id="bootstrap-css">
+    <link href="css/product.css" rel="stylesheet">
+
+</head>
+  <div class="navbar navbar-inverse navbar-static-top">
+
+   <div class="container">
+
+        <div class="collapse navbar-collapse navHeaderCollapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="purchase.html">Your purchases</a></li>
+            <li><a href="logout.html">Log out</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+<body>
+
+
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container">
+	<div class="row">
+
+	</div>
+</div>
+
+<script>
+
+        if(sessionStorage['user_id'] == undefined){
+
+            $(location).attr('href', 'login.html');
+
+        }
+        else {
+        $.get("http://localhost:8080/products", function(products, status){
+            products.forEach(function(product){
+                    text = $(".row").html();
+                    text += '<div class="col-sm-3">'
+                    text += '<article class="col-item">'
+                    text +=  '<div class="photo">'
+                    text +=   '<a href="#">'
+                    text += '<img src="images/' + product.picturePath + '.jpg"  width="190" height="230" alt="Product Image" /> </a>'
+                    text += '</div>'
+                    text += '<div class="info">'
+                    text +=       '<div class="row">'
+                    text +=     '<div class="price-details col-md-6">'
+                    text +=                '<h1>' + product.name + '</h1>'
+                    text +=                '<span class="price-new">'+ product.price + '</span>'
+                    text +=           '</div>'
+                    text +=        '</div>'
+                    text +=        '<div class="separator clear-left">'
+                    text +=           '<p class="btn-add">'
+                    text +=                '<i class="fa fa-shopping-cart"></i><a href="product.html?id=' + product.id + '"'
+                    text +=  'class="hidden-sm">'
+                    text +=  'Buy</a>'
+                    text +=        '</p>'
+                    text +=            '</div>'
+                    text +=            '<div class="clearfix"></div>'
+                    text +=       '</div>'
+                    text +=     '</article>'
+                    $(".row").html(text);
+            });
+
+        });
+    }
+
+    
+</script>
+
+</body>
+</html>

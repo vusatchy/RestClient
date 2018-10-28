@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+    a.list-group-item {
+        height:auto;
+        min-height:220px;
+    }
+    a.list-group-item.active small {
+        color:#fff;
+    }
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="css/boot.css" rel="stylesheet" id="bootstrap-css">
+    <link href="css/product.css" rel="stylesheet">
+</head>
+
+
+  <div class="navbar navbar-inverse navbar-static-top">
+
+   <div class="container">
+
+        <div class="collapse navbar-collapse navHeaderCollapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="purchase.html">Your purchases</a></li>
+            <li><a href="logout.html">Log out</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="well">
+        <h1 class="text-center">Products you bought</h1>
+        <div class="list-group">
+          <div id="purchases_placeholder"></div>   
+                    <a href="#" class="list-group-item">
+                        <div class="media col-md-3">
+                        <figure class="pull-left">
+                            <img src="images/white.jpg" height="200" width="200"  alt="placehold.it/350x250" >
+                        </figure>
+                        </div>
+                        <div class="col-md-6">
+
+                        <h2 class="list-group-item-text">
+                            Total sum of all bought products
+                        </h2>
+                        </div>
+                        <div class="col-md-3 text-center">
+                             <h2><p id="sum_holder"> </p><small> dollars </small></h2>
+                        </div>
+              </a>
+        </div>
+        </div>
+    </div>
+</div>
+<script>
+
+        if(sessionStorage['user_id'] == undefined){
+
+            $(location).attr('href', 'login.html');
+
+        }
+        else {
+        $.get("http://localhost:8080/purchase?id=" + sessionStorage['user_id'], function(response, status){
+                text = ''
+                response.purchases.forEach(function(purchase){
+                text +=         '<a href="#" class="list-group-item">'
+                text +=         '<div class="media col-md-3">'
+                text +=    '<figure class="pull-left">'
+                text +=        '<img src="images/' + purchase.product.picturePath + '.jpg" height="200" width="200"'  
+                text += 'alt="placehold.it/350x250" ></figure></div>'
+                text += '<div class="col-md-6">'
+                text +=    '<h2 class="list-group-item-text">' + purchase.product.name + '</h2></div>'
+                text += '<div class="col-md-3 text-center">'
+                text +=    '<h2>' + purchase.product.price + '<small> dollars </small></h2>'
+                text +=    '<p>' + purchase.time + '</p></div></a>'
+                });
+
+                $("#purchases_placeholder").html(text);
+                $("#sum_holder").text(response.sum);
+                });
+         }
+</script>
+</body>
+</html>
+
+
+
+
